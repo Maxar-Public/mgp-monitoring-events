@@ -1,0 +1,495 @@
+{
+  "data": {
+    "monitors": [
+      {
+        "id": "demo:0000001",
+        "date_created": "2025-03-28T20:58:01Z",
+        "date_modified": "2025-03-28T20:58:02Z",
+        "creator_id": "demo-creator:9999",
+        "creator_group_id": "38",
+        "source": "discovery/catalog",
+        "description": "",
+        "start_datetime": null,
+        "end_datetime": null,
+        "aoi_geojson": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -105.0050914215794,
+                39.78390523791438
+              ],
+              [
+                -104.99873890348172,
+                39.78390523791438
+              ],
+              [
+                -104.99873890348172,
+                39.791044792224646
+              ],
+              [
+                -105.0050914215794,
+                39.78390523791438
+              ]
+            ]
+          ]
+        },
+        "match_criteria": {
+          "eo:cloud_cover": {
+            "lt": "80"
+          },
+          "view:off_nadir": {
+            "gt": 0
+          },
+          "platform": {
+            "in": [
+              "geoeye-01",
+              "worldview-01",
+              "worldview-02",
+              "worldview-03",
+              "worldview-legion-01",
+              "worldview-legion-02"
+            ]
+          }
+        },
+        "erode_area": false,
+        "erosion_complete_threshold_pct": 100,
+        "order_when_complete": false,
+        "order_templates": null,
+        "batch_order_templates": null,
+        "monitor_notifications": null,
+        "state": {},
+        "enabled": true,
+        "metadata": {
+          "store_name": "Denver Commerce Center",
+          "market_segment": "Commerce Center",
+          "address": "1101-1109 W. 48th Ave. Denver, CO 80221"
+        },
+        "monitor_links": {
+          "self": "https://api.maxar.com/monitoring/v1/monitors/demo:0000001",
+          "events": "https://api.maxar.com/monitoring/v1/monitors/demo:0000001/events"
+        }
+      },
+      {
+        "id": "demo:0000002",
+        "date_created": "2025-03-28T21:01:15Z",
+        "date_modified": "2025-03-28T21:01:15Z",
+        "creator_id": "demo-creator:9999",
+        "creator_group_id": "38",
+        "source": "discovery/catalog",
+        "description": "",
+        "start_datetime": null,
+        "end_datetime": null,
+        "aoi_geojson": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -105.05758842477654,
+                39.82370745585126
+              ],
+              [
+                -105.05355371733613,
+                39.82370745585126
+              ],
+              [
+                -105.05355371733613,
+                39.826739688930836
+              ],
+              [
+                -105.05758842477654,
+                39.82370745585126
+              ]
+            ]
+          ]
+        },
+        "match_criteria": {
+          "eo:cloud_cover": {
+            "lt": "80"
+          },
+          "view:off_nadir": {
+            "gt": 0
+          },
+          "platform": {
+            "in": [
+              "geoeye-01",
+              "worldview-01",
+              "worldview-02",
+              "worldview-03",
+              "worldview-legion-01",
+              "worldview-legion-02"
+            ]
+          }
+        },
+        "erode_area": false,
+        "erosion_complete_threshold_pct": 100,
+        "order_when_complete": false,
+        "order_templates": null,
+        "batch_order_templates": null,
+        "monitor_notifications": null,
+        "state": {},
+        "enabled": true,
+        "metadata": {
+          "store_name": "Walmart Supercenter",
+          "market_segment": "Retail",
+          "address": "7155 Sheridan Boulevard, Westminster, CO 80003, United States"
+        },
+        "monitor_links": {
+          "self": "https://api.maxar.com/monitoring/v1/monitors/demo:0000002",
+          "events": "https://api.maxar.com/monitoring/v1/monitors/demo:0000002/events"
+        }
+      },
+      {
+        "id": "demo:0000003",
+        "date_created": "2025-03-28T21:06:30Z",
+        "date_modified": "2025-03-28T21:06:30Z",
+        "creator_id": "demo-creator:9999",
+        "creator_group_id": "38",
+        "source": "discovery/catalog",
+        "description": "",
+        "start_datetime": null,
+        "end_datetime": null,
+        "aoi_geojson": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -104.8697374727504,
+                39.68938069322341
+              ],
+              [
+                -104.86597103043238,
+                39.68938069322341
+              ],
+              [
+                -104.86597103043238,
+                39.69165932037933
+              ],
+              [
+                -104.8697374727504,
+                39.68938069322341
+              ]
+            ]
+          ]
+        },
+        "match_criteria": {
+          "eo:cloud_cover": {
+            "lt": "80"
+          },
+          "view:off_nadir": {
+            "gte": 0
+          },
+          "platform": {
+            "in": [
+              "geoeye-01",
+              "worldview-01",
+              "worldview-02",
+              "worldview-03",
+              "worldview-legion-01",
+              "worldview-legion-02"
+            ]
+          }
+        },
+        "erode_area": false,
+        "erosion_complete_threshold_pct": 100,
+        "order_when_complete": false,
+        "order_templates": null,
+        "batch_order_templates": null,
+        "monitor_notifications": null,
+        "state": {},
+        "enabled": true,
+        "metadata": {
+          "store_name": "Costco",
+          "market_segment": "Warehouse Store",
+          "address": "1471 S Havana St, Aurora, CO 80012, United States"
+        },
+        "monitor_links": {
+          "self": "https://api.maxar.com/monitoring/v1/monitors/demo:0000003",
+          "events": "https://api.maxar.com/monitoring/v1/monitors/demo:0000003/events"
+        }
+      },
+      {
+        "id": "demo:0000004",
+        "date_created": "2025-03-28T21:07:37Z",
+        "date_modified": "2025-03-28T21:07:38Z",
+        "creator_id": "demo-creator:9999",
+        "creator_group_id": "38",
+        "source": "discovery/catalog",
+        "description": "",
+        "start_datetime": null,
+        "end_datetime": null,
+        "aoi_geojson": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -104.86582139376513,
+                39.689896693278854
+              ],
+              [
+                -104.8621461615887,
+                39.689896693278854
+              ],
+              [
+                -104.8621461615887,
+                39.69189048125117
+              ],
+              [
+                -104.86582139376513,
+                39.689896693278854
+              ]
+            ]
+          ]
+        },
+        "match_criteria": {
+          "eo:cloud_cover": {
+            "lt": "80"
+          },
+          "view:off_nadir": {
+            "gte": 0
+          },
+          "platform": {
+            "in": [
+              "geoeye-01",
+              "worldview-01",
+              "worldview-02",
+              "worldview-03",
+              "worldview-legion-01",
+              "worldview-legion-02"
+            ]
+          }
+        },
+        "erode_area": false,
+        "erosion_complete_threshold_pct": 100,
+        "order_when_complete": false,
+        "order_templates": null,
+        "batch_order_templates": null,
+        "monitor_notifications": null,
+        "state": {},
+        "enabled": true,
+        "metadata": {
+          "store_name": "Target",
+          "market_segment": "Department store",
+          "address": "1400 S Havana St, Aurora, CO 80012, United States"
+        },
+        "monitor_links": {
+          "self": "https://api.maxar.com/monitoring/v1/monitors/demo:0000004",
+          "events": "https://api.maxar.com/monitoring/v1/monitors/demo:0000004/events"
+        }
+      },
+      {
+        "id": "demo:0000005",
+        "date_created": "2025-03-28T21:11:02Z",
+        "date_modified": "2025-03-28T21:11:03Z",
+        "creator_id": "demo-creator:9999",
+        "creator_group_id": "38",
+        "source": "discovery/catalog",
+        "description": "",
+        "start_datetime": null,
+        "end_datetime": null,
+        "aoi_geojson": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -104.89960888480124,
+                39.65222268506989
+              ],
+              [
+                -104.89879872413168,
+                39.65222268506989
+              ],
+              [
+                -104.89879872413168,
+                39.65294547272578
+              ],
+              [
+                -104.89960888480124,
+                39.65222268506989
+              ]
+            ]
+          ]
+        },
+        "match_criteria": {
+          "eo:cloud_cover": {
+            "lt": "80"
+          },
+          "view:off_nadir": {
+            "gte": 0
+          },
+          "platform": {
+            "in": [
+              "geoeye-01",
+              "worldview-01",
+              "worldview-02",
+              "worldview-03",
+              "worldview-legion-01",
+              "worldview-legion-02"
+            ]
+          }
+        },
+        "erode_area": false,
+        "erosion_complete_threshold_pct": 100,
+        "order_when_complete": false,
+        "order_templates": null,
+        "batch_order_templates": null,
+        "monitor_notifications": null,
+        "state": {},
+        "enabled": true,
+        "metadata": {
+          "store_name": "CVS Pharmacy",
+          "market_segment": "Pharmacy",
+          "address": "7950 E Hampden Ave, Denver, CO 80231, United States"
+        },
+        "monitor_links": {
+          "self": "https://api.maxar.com/monitoring/v1/monitors/demo:0000005",
+          "events": "https://api.maxar.com/monitoring/v1/monitors/demo:0000005/events"
+        }
+      },
+      {
+        "id": "demo:0000006",
+        "date_created": "2025-03-28T21:15:45Z",
+        "date_modified": "2025-03-28T21:15:45Z",
+        "creator_id": "demo-creator:9999",
+        "creator_group_id": "38",
+        "source": "discovery/catalog",
+        "description": "",
+        "start_datetime": null,
+        "end_datetime": null,
+        "aoi_geojson": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -104.98742189266524,
+                39.91343534865073
+              ],
+              [
+                -104.98655271366879,
+                39.91343534865073
+              ],
+              [
+                -104.98655271366879,
+                39.913974357502056
+              ],
+              [
+                -104.98742189266524,
+                39.91343534865073
+              ]
+            ]
+          ]
+        },
+        "match_criteria": {
+          "eo:cloud_cover": {
+            "lt": "80"
+          },
+          "view:off_nadir": {
+            "gte": 0
+          },
+          "platform": {
+            "in": [
+              "geoeye-01",
+              "worldview-01",
+              "worldview-02",
+              "worldview-03",
+              "worldview-legion-01",
+              "worldview-legion-02"
+            ]
+          }
+        },
+        "erode_area": false,
+        "erosion_complete_threshold_pct": 100,
+        "order_when_complete": false,
+        "order_templates": null,
+        "batch_order_templates": null,
+        "monitor_notifications": null,
+        "state": {},
+        "enabled": true,
+        "metadata": {
+          "store_name": "LongHorn Steakhouse",
+          "market_segment": "Restaurant",
+          "address": "100 E 120th Ave A, Northglenn, CO 80233, United States"
+        },
+        "monitor_links": {
+          "self": "https://api.maxar.com/monitoring/v1/monitors/demo:0000006",
+          "events": "https://api.maxar.com/monitoring/v1/monitors/demo:0000006/events"
+        }
+      },
+      {
+        "id": "demo:0000007",
+        "date_created": "2025-03-28T21:18:26Z",
+        "date_modified": "2025-03-28T21:18:26Z",
+        "creator_id": "demo-creator:9999",
+        "creator_group_id": "38",
+        "source": "discovery/catalog",
+        "description": "",
+        "start_datetime": null,
+        "end_datetime": null,
+        "aoi_geojson": {
+          "type": "Polygon",
+          "coordinates": [
+            [
+              [
+                -104.99912771788826,
+                39.91418831403795
+              ],
+              [
+                -104.99779175757885,
+                39.91418831403795
+              ],
+              [
+                -104.99779175757885,
+                39.91469851538788
+              ],
+              [
+                -104.99912771788826,
+                39.91418831403795
+              ]
+            ]
+          ]
+        },
+        "match_criteria": {
+          "eo:cloud_cover": {
+            "lt": "80"
+          },
+          "view:off_nadir": {
+            "gte": 0
+          },
+          "platform": {
+            "in": [
+              "geoeye-01",
+              "worldview-01",
+              "worldview-02",
+              "worldview-03",
+              "worldview-legion-01",
+              "worldview-legion-02"
+            ]
+          }
+        },
+        "erode_area": false,
+        "erosion_complete_threshold_pct": 100,
+        "order_when_complete": false,
+        "order_templates": null,
+        "batch_order_templates": null,
+        "monitor_notifications": null,
+        "state": {},
+        "enabled": true,
+        "metadata": {
+          "store_name": "Chili's Grill and Bar",
+          "market_segment": "Restaurant",
+          "address": "901 W 120th Ave, Denver, CO 80234, United States"
+        },
+        "monitor_links": {
+          "self": "https://api.maxar.com/monitoring/v1/monitors/demo:0000007",
+          "events": "https://api.maxar.com/monitoring/v1/monitors/demo:0000007/events"
+        }
+      }
+    ]    
+  },
+  "links": {
+    "request": "https://api.maxar.com/monitoring/v1/monitors?filter=creator_id%demo-creator:99993&limit=1000&sort=asc"
+  },
+  "request_timestamp": "2025-03-28T14:44:59Z",
+  "response_timestamp": "2025-03-28T14:45:00Z",
+  "request_duration": 1
+}
