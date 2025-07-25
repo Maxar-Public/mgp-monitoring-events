@@ -62,6 +62,7 @@
       appStore.clearBanner(); 
       showDialog.value = false;
       appStore.setBanner("success", "API Key Validated");
+      appStore.monitorManagerRefresh(true);
     }
     catch (err: any) {
       appStore.setBanner("error", "Key invalid. Check you have the correct API key and try again.");

@@ -484,7 +484,155 @@
           "events": "https://api.maxar.com/monitoring/v1/monitors/demo:0000007/events"
         }
       }
-    ]    
+    ]
+  },
+  "events": {
+    "demo:0000001": [
+      {
+        "id": "demo-event:001-001",
+        "event_timestamp": "2024-12-15T14:30:00Z",
+        "event": {
+          "type": "match",
+          "event_id": "demo-image:001-001"
+        },
+        "metadata": {
+          "confidence": 0.85,
+          "change_type": "construction"
+        }
+      },
+      {
+        "id": "demo-event:001-002",
+        "event_timestamp": "2024-12-10T09:15:00Z",
+        "event": {
+          "type": "match",
+          "event_id": "demo-image:001-002"
+        },
+        "metadata": {
+          "confidence": 0.92,
+          "change_type": "parking_expansion"
+        }
+      }
+    ],
+    "demo:0000002": [
+      {
+        "id": "demo-event:002-001",
+        "event_timestamp": "2024-12-18T16:45:00Z",
+        "event": {
+          "type": "match",
+          "event_id": "demo-image:002-001"
+        },
+        "metadata": {
+          "confidence": 0.78,
+          "change_type": "renovation"
+        }
+      },
+      {
+        "id": "demo-event:002-002",
+        "event_timestamp": "2024-12-05T11:20:00Z",
+        "event": {
+          "type": "patch",
+          "event_id": null
+        },
+        "metadata": {
+          "admin_action": "monitor_updated",
+          "updated_by": "demo-user"
+        }
+      }
+    ],
+    "demo:0000003": [
+      {
+        "id": "demo-event:003-001",
+        "event_timestamp": "2024-12-20T13:10:00Z",
+        "event": {
+          "type": "match",
+          "event_id": "demo-image:003-001"
+        },
+        "metadata": {
+          "confidence": 0.89,
+          "change_type": "new_structure"
+        }
+      }
+    ],
+    "demo:0000004": [
+      {
+        "id": "demo-event:004-001",
+        "event_timestamp": "2024-12-12T08:30:00Z",
+        "event": {
+          "type": "match",
+          "event_id": "demo-image:004-001"
+        },
+        "metadata": {
+          "confidence": 0.95,
+          "change_type": "demolition"
+        }
+      },
+      {
+        "id": "demo-event:004-002",
+        "event_timestamp": "2024-12-08T15:45:00Z",
+        "event": {
+          "type": "match",
+          "event_id": "demo-image:004-002"
+        },
+        "metadata": {
+          "confidence": 0.82,
+          "change_type": "landscaping"
+        }
+      }
+    ],
+    "demo:0000005": [
+      {
+        "id": "demo-event:005-001",
+        "event_timestamp": "2024-12-22T10:15:00Z",
+        "event": {
+          "type": "patch",
+          "event_id": null
+        },
+        "metadata": {
+          "admin_action": "monitor_enabled",
+          "updated_by": "demo-admin"
+        }
+      }
+    ],
+    "demo:0000006": [
+      {
+        "id": "demo-event:006-001",
+        "event_timestamp": "2024-12-14T12:00:00Z",
+        "event": {
+          "type": "match",
+          "event_id": "demo-image:006-001"
+        },
+        "metadata": {
+          "confidence": 0.87,
+          "change_type": "signage_update"
+        }
+      }
+    ],
+    "demo:0000007": [
+      {
+        "id": "demo-event:007-001",
+        "event_timestamp": "2024-12-16T17:30:00Z",
+        "event": {
+          "type": "match",
+          "event_id": "demo-image:007-001"
+        },
+        "metadata": {
+          "confidence": 0.91,
+          "change_type": "exterior_renovation"
+        }
+      },
+      {
+        "id": "demo-event:007-002",
+        "event_timestamp": "2024-12-11T14:20:00Z",
+        "event": {
+          "type": "match",
+          "event_id": "demo-image:007-002"
+        },
+        "metadata": {
+          "confidence": 0.76,
+          "change_type": "parking_restriping"
+        }
+      }
+    ]
   },
   "links": {
     "request": "https://api.maxar.com/monitoring/v1/monitors?filter=creator_id%demo-creator:99993&limit=1000&sort=asc"

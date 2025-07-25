@@ -65,14 +65,15 @@
               ></v-text-field>
 
               <!-- Market Segment -->
-              <v-text-field
+              <v-select
                 v-model="marketSegment"
+                :items="marketSegmentOptions"
                 label="Market Segment"
-                type="text"
                 variant="underlined"
                 density="compact"
                 :disabled="loading"
-              ></v-text-field>
+                clearable
+              ></v-select>
             </div>
           </div>
           </v-card-text>
@@ -106,6 +107,17 @@
   const storeName = ref("");
   const storeAddress = ref("");
   const marketSegment = ref("");
+
+  const marketSegmentOptions = [
+    "Commerce Center",
+    "Retail",
+    "Warehouse Store",
+    "Department store",
+    "Pharmacy",
+    "Restaurant",
+    "Professional Services",
+    "Other"
+  ]
 
   const loading = ref(false);
   const started = ref(false);

@@ -5,7 +5,6 @@
         <div class="header-container mb-6">
           <div class="d-flex justify-space-between align-center mb-2">
             <h2>Monitor Manager</h2>
-            <v-btn size="small" variant="tonal" class="add-monitor-btn" :disabled="appStore.demoMode" @click="navigateToMapAndDraw">ADD NEW MONITOR</v-btn>
           </div>
           <v-divider></v-divider>
         </div>
@@ -137,10 +136,6 @@ onMounted(async () => {
 });
 
 
-const navigateToMapAndDraw = () => {
-  appStore.setBanner("info", "Select a location, then click 'Create New Monitor' to draw the boundary.");
-  router.push('/');
-};
 
 const displayMonitorDetails = (monitor: any) => {
   if (!map || !monitor.aoi_geojson?.coordinates?.length) return;

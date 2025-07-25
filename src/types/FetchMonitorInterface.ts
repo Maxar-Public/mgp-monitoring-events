@@ -15,6 +15,7 @@ export interface Monitor {
   match_criteria?: {
     "eo:cloud_cover"?: { eq: number };
     "view:off_nadir"?: { eq: number };
+    "aoi:coverage_pct"?: { eq: number };
     platform?: { in: string[] };
   };
   erode_area: boolean;

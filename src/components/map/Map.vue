@@ -168,7 +168,6 @@ const onKeydown = (event: KeyboardEvent) => {
 
 onMounted(() => {
   if (!authStore.isTokenValid()) {
-    console.warn('Token invalid, redirecting to login...')
     authStore.showLoginModal = true;
   } else {
   }

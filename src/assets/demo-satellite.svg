@@ -1,0 +1,44 @@
+<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient to simulate earth tones -->
+  <defs>
+    <linearGradient id="earthGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a5d23;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#6b7c32;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2d3a1a;stop-opacity:1" />
+    </linearGradient>
+    <pattern id="texture" patternUnits="userSpaceOnUse" width="20" height="20">
+      <rect width="20" height="20" fill="#5a6d2a" opacity="0.3"/>
+      <circle cx="10" cy="10" r="2" fill="#7a8d3a" opacity="0.5"/>
+    </pattern>
+  </defs>
+  
+  <!-- Base earth tone background -->
+  <rect width="512" height="512" fill="url(#earthGradient)"/>
+  
+  <!-- Add texture overlay -->
+  <rect width="512" height="512" fill="url(#texture)"/>
+  
+  <!-- Simulate building/structure features -->
+  <rect x="100" y="150" width="80" height="60" fill="#8b9a41" opacity="0.8"/>
+  <rect x="200" y="200" width="120" height="80" fill="#a8b850" opacity="0.7"/>
+  <rect x="350" y="100" width="90" height="70" fill="#6b7c32" opacity="0.9"/>
+  
+  <!-- Simulate roads/paths -->
+  <rect x="0" y="250" width="512" height="8" fill="#3a4a1f" opacity="0.8"/>
+  <rect x="180" y="0" width="8" height="512" fill="#3a4a1f" opacity="0.8"/>
+  
+  <!-- Simulate parking areas -->
+  <rect x="120" y="280" width="60" height="40" fill="#4a5d23" opacity="0.6"/>
+  <rect x="300" y="320" width="80" height="50" fill="#4a5d23" opacity="0.6"/>
+  
+  <!-- Demo watermark -->
+  <text x="20" y="40" font-family="Arial, sans-serif" font-size="18" fill="white" opacity="0.9">DEMO SATELLITE IMAGE</text>
+  
+  <!-- Grid overlay to simulate satellite imagery -->
+  <defs>
+    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.1"/>
+    </pattern>
+  </defs>
+  <rect width="512" height="512" fill="url(#grid)"/>
+</svg>

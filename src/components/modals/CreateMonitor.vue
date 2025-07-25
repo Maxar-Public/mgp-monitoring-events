@@ -28,25 +28,27 @@
           ></v-text-field>
 
           <div>
-            <v-label style="padding-bottom: 10px">Match Criteria</v-label>
+            <v-label style="padding-bottom: 10px">
+              Match Criteria&nbsp;<span style="font-size: 12px;">(required)</span>
+            </v-label>
             <div class="options">
-
+              <!-- AOI Coverage Percentage -->
+              <v-text-field
+                  v-model="aoiCoveragePercent"
+                  label="Min AOI Coverage (%)"
+                  variant="underlined"
+                  placeholder="Range between 1 and 100"
+                  type="number"
+                  :rules="[(v) => validateAoiCoveragePercent(v)]"
+                  :step="0.01"
+                  @keypress="restrictInput" 
+                  class="match-criteria-input">
+                </v-text-field>
+               
               <!-- Area cloud coverage -->
-               <div class="d-flex align-center match-criteria-row">
-                 <v-select
-                    v-model="areaCloudCoverage.operator"
-                    :items="operators"
-                    item-title="symbol"
-                    item-value="value"
-                    variant="underlined"
-                    hide-details
-                    label=""
-                    :rules="[validateOperator]"
-                    class="match-criteria-select">
-                 </v-select>
                  <v-text-field
-                    v-model="areaCloudCoverage.value"
-                    label="Area cloud coverage"
+                    v-model="areaCloudCoverage"
+                    label="Max Cloud Coverage (%) *"
                     variant="underlined"
                     placeholder="Range between 0 and 100"
                     type="number"
@@ -54,26 +56,12 @@
                     :step="0.01"
                     @keypress="restrictInput" 
                     class="match-criteria-input">
-                  </v-text-field>
-               </div>
-              
+                  </v-text-field>              
 
               <!-- Off nadir angle -->
-               <div div class="d-flex align-center match-criteria-row">
-                <v-select
-                      v-model="offNadirAngle.operator"
-                      :items="operators"
-                      item-title="symbol"
-                      item-value="value"
-                      variant="underlined"
-                      hide-details
-                      label=""
-                      :rules="[validateOperator]"
-                      class="match-criteria-select">
-                </v-select>
                 <v-text-field
-                  v-model="offNadirAngle.value"
-                  label="Off nadir angle"
+                  v-model="offNadirAngle"
+                  label="Max Off-Nadir Angle *"
                   variant="underlined"
                   placeholder="Range between 0 and 90"
                   type="number"
@@ -82,9 +70,8 @@
                   @keypress="restrictInput"
                   class="match-criteria-input">
                 </v-text-field>
-              </div>
-
             </div>
+            
           </div>
 
           <!-- platform -->
@@ -127,7 +114,7 @@
               <!-- Store Name -->
               <v-text-field
                 v-model="storeName"
-                label="Store Name*"
+                label="Store Name *"
                 type="text"
                 variant="underlined"
                 :rules="[(v) => !!v || 'Store Name is required']"
@@ -143,13 +130,14 @@
               ></v-text-field>
 
               <!-- Market Segment -->
-              <v-text-field
+              <v-select
                 v-model="marketSegment"
+                :items="marketSegmentOptions"
                 label="Market Segment"
-                type="text"
                 variant="underlined"
                 density="compact"
-              ></v-text-field>
+                clearable
+              ></v-select>
             </div>
           </div>
         </v-card-text>
@@ -179,17 +167,21 @@ import { ref, computed } from "vue";
 
 const appStore = useAppStore();
 
-const operators = [
-  {symbol:"<", value:"lt"},
-  {symbol:">", value:"gt"},
-  {symbol:"<=", value:"lte"},
-  {symbol:">=", value:"gte"},
-  {symbol:"=", value:"eq"}
+const marketSegmentOptions = [
+  "Commerce Center",
+  "Retail",
+  "Warehouse Store",
+  "Department store",
+  "Pharmacy",
+  "Restaurant",
+  "Professional Services",
+  "Other"
 ]
 
 const description = ref("");
-const areaCloudCoverage = ref({operator:"", value:0});
-const offNadirAngle = ref({operator:"", value:0});
+const areaCloudCoverage = ref<number | null>(null);
+const offNadirAngle = ref<number | null>(null);
+const aoiCoveragePercent = ref<number | null>(null);;
 const selectedPlatforms = ref(appStore.platformList);
 const storeName = ref("");
 const storeAddress = ref("");
@@ -206,10 +198,9 @@ const validateCloudCoverage = (value: number) =>
   (value >= 0 && value <= 100) || "Value must be between 0 and 100";
 const validateOffNadirAngle = (value: number) =>
   (value >= 0 && value <= 90) || "Value must be between 0 and 90";
+const validateAoiCoveragePercent = (value: number) =>
+  (value >= 1 && value <= 100 || !value) || "Value must be between 1 and 100 ";
 
-const validateOperator = (operator: string) => {
-  return !!operator || "Please select an operator"
-}
 const restrictInput = (event: KeyboardEvent) => {
   if (!/[0-9.]/.test(event.key)) {
     event.preventDefault();
@@ -217,22 +208,22 @@ const restrictInput = (event: KeyboardEvent) => {
 };
 
 const isValidForm = computed(() => {
+  if (!areaCloudCoverage.value || !offNadirAngle.value) return false;
   return (
-    validateCloudCoverage(areaCloudCoverage.value.value) === true &&
-    validateOffNadirAngle(offNadirAngle.value.value) === true
+    validateCloudCoverage(areaCloudCoverage.value) === true &&
+    validateOffNadirAngle(offNadirAngle.value) === true
   );
 });
 
 const resetValues = () => {
   description.value = "";
-  areaCloudCoverage.value.value = 0;
-  areaCloudCoverage.value.operator = ""
-  offNadirAngle.value.value = 0;
-  offNadirAngle.value.operator = ""
+  areaCloudCoverage.value = null;
+  offNadirAngle.value = null;
   selectedPlatforms.value = appStore.platformList;
   storeName.value = "";
   storeAddress.value = "";
   marketSegment.value = "";
+  aoiCoveragePercent.value = null;
 }
 
 const closeDialog = () => {
@@ -246,12 +237,11 @@ const createMonitor = async () => {
     appStore.setBanner("error", "Store Name is required.");
     return;
   }
-  if(!areaCloudCoverage.value.operator || !offNadirAngle.value.operator){
-    appStore.setBanner("error", "Operator in Match Criteria is required.")
+  if(!areaCloudCoverage.value || !offNadirAngle.value){
+    appStore.setBanner("error", "Match Criteria is required.")
     return;
   }
 
-  //const apiKey = appStore.maxarApiKey;
   const coordinates = [
     [
       [appStore.bbox[0], appStore.bbox[1]],
@@ -273,10 +263,10 @@ const createMonitor = async () => {
         in: selectedPlatforms.value,
       },
       "eo:cloud_cover": {
-        [areaCloudCoverage.value.operator]: areaCloudCoverage.value.value,
+        lte: areaCloudCoverage.value,
       },
       "view:off_nadir": {
-        [offNadirAngle.value.operator]: offNadirAngle.value.value,
+        lte: offNadirAngle.value,
       },
     },
     metadata: {
@@ -286,6 +276,9 @@ const createMonitor = async () => {
       creator_key: sessionStorage.getItem('apiKeyHash')
     }
   };
+  if(aoiCoveragePercent.value){
+    requestBody.match_criteria["aoi:coverage_pct"] = {"gte": aoiCoveragePercent.value};
+  }
   loading.value = true;
 
   try {
@@ -334,9 +327,10 @@ const createMonitor = async () => {
 }
 
 .options {
-  display: flex;
-  justify-content: space-between;
-  column-gap: 20%;
+  display: flex !important;
+  align-items: center;
+  gap: 8px !important;
+  flex-wrap: wrap;
 }
 
 .checkbox-spacing {
@@ -347,25 +341,15 @@ const createMonitor = async () => {
   margin: 10px;
 }
 
-.match-criteria-input, .match-criteria-select {
+.match-criteria-input {
+  flex: 1 1 0;
+  min-width: 170px;
+  max-width: calc(33.33% - 8px);
   margin: 0;
-  height: 48px;
-}
-
-.match-criteria-select {
-  width: 60px;
-  min-width: 60px;
-  padding-bottom: 4px;
-}
-
-.match-criteria-input{
-  flex-grow: 1;
-  min-width: 200px;
 }
 
 .match-criteria-row {
   display: flex;
-  align-items: flex-end;
   gap: 10px;
   margin-bottom: 10px;
 }

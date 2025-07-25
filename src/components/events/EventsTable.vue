@@ -6,7 +6,7 @@
         <div class="header-container mb-4">
           <div class="d-flex justify-space-between align-center mb-4">
             <h2>Event Feed</h2>
-            <v-btn size="small" variant="tonal" @click="refresh" class="mb-3">
+            <v-btn size="small" variant="tonal" @click="refresh(true)" class="mb-3">
               REFRESH
             </v-btn>
           </div>
@@ -25,7 +25,13 @@
                 prepend-inner-icon="mdi-filter-variant"
                 density="compact"
                 style="width: 200px"
-              ></v-select>
+              >
+              <template v-slot:item="{ props, item }">
+                <v-list-item>
+                    <v-list-item v-bind="props" :subtitle="item.raw.from"></v-list-item>
+                  </v-list-item>
+                </template>
+              </v-select>
 
               <!-- Date range from -->
               <v-text-field
@@ -46,12 +52,13 @@
                 density="compact"
               ></v-text-field>
             </div>
+            
             <div class="filter-wrap">
               <!-- Search Bar -->
               <v-text-field
                 v-model="search"
                 density="compact"
-                label="Search"
+                label="Search name, address, or market segment"
                 prepend-inner-icon="mdi-magnify"
                 variant="solo-filled"
                 flat
@@ -87,13 +94,13 @@
                   @mouseleave="unhighlightEvent"
                   style="cursor: pointer;"
                 >
-                  <td>
-                    <div class="event-container">
+                  <td >
+                    <div class="event-container" >
                       <!-- Image -->
-                      <v-avatar v-if="appStore.eventImagesMap.get(item.metadata.event.event_id)" class="square-image">
-                        <v-img :src="appStore.eventImagesMap.get(item.metadata.event.event_id)" alt="Image" max-width="50" max-height="50"></v-img>
+                      <v-avatar @click.stop="openImagePopup(item)" v-if="appStore.eventImagesMap.get(item.metadata.event.event_id)" class="thumbnail">
+                        <v-img :src="appStore.eventImagesMap.get(item.metadata.event.event_id)" alt="Image" max-width="50" max-height="50" ></v-img>
                       </v-avatar>
-                      <v-avatar v-else-if="appStore.eventImagesMap.get(item.id) === 'noImage'" class="square-image">
+                      <v-avatar v-else-if="appStore.eventImagesMap.get(item.id) === 'noImage'">
                         <v-img :src="imagePlaceholder" alt="Image" max-width="50" max-height="50"></v-img>
                       </v-avatar>
                       <v-avatar v-else>
@@ -106,7 +113,7 @@
                           <strong>Address:</strong> {{ item.address }}
                         </v-list-item-subtitle>
                         <v-list-item-subtitle class="text-grey-darken-1">
-                          <strong>Type:</strong> {{ item.type }} • <strong>Timestamp:</strong> {{ item.event_timestamp }}
+                          <strong>Type:</strong> {{ getDisplayType(item) }} • <strong>Timestamp:</strong> {{ item.event_timestamp }}
                         </v-list-item-subtitle>
                       </div>
                     </div>
@@ -124,12 +131,19 @@
     @popup-closed="unhighlightSelectedEvent"
   />
 
+  <ImagePopup
+    v-model="popupImageOpen"
+    :src="currentImage"
+    :featureImageId="featureImageId"
+  />
+
 </template>
 
 <script lang="ts" setup>
 import { useAppStore } from "@/stores/app";
 import { ref, computed, watch, onMounted } from 'vue';
 import imagePlaceholder from "@/assets/noImage.png";
+import ImagePopup from '@/components/events/ImagePopup.vue';
 import { useAuthStore } from "@/stores/auth";
 
 const appStore = useAppStore();
@@ -148,16 +162,31 @@ const dateRangeFrom = ref(oneYearAgoString);
 const dateRangeTo = ref(today);
 const search = ref('');
 const selectedType = ref('');
+const popupImageOpen = ref(false)
+const currentImage = ref<string>('')
+const featureImageId = ref('')
+
 
 //Filtering Logic
 const filteredEvents = computed(() => {
   return appStore.monitorEvents
     .filter((event) => {
       //Filtering by type
-      if (selectedType.value && event.type !== selectedType.value) {
-        return false;
+      switch (selectedType.value) {
+        case '':
+          return true; // All Types
+        case 'match':
+        case 'patch':
+          return event.type === selectedType.value;
+        case 'Initial creation':
+          return event.metadata?.event?.message;
+        case 'enable':
+          return event.metadata?.event?.monitor_state_changed === 'enable';
+        case 'disable':
+          return event.metadata?.event?.monitor_state_changed === 'disable';
+        default:
+          return true;
       }
-      return true;
     })
     .filter((event) => {
       //Filtering by search input - search only in store_name, address, and market_segment
@@ -182,24 +211,39 @@ const filteredEvents = computed(() => {
 const roles = ref([
   { label: 'All Types', value: '' }, // Default option
   { label: 'Match', value: 'match' },
-  { label: 'Admin Events', value: 'patch' },
+  { label: 'Patch', value: 'patch', from: 'Admin Events' },
+  { label: 'Initial Creation', value: 'Initial creation', from: 'Admin Events' },
+  { label: 'Monitor Enabled', value: 'enable', from: 'Admin Events' },
+  { label: 'Monitor Disabled', value: 'disable', from: 'Admin Events' }
 ]);
 
-onMounted(() => {  
+const getDisplayType = (item: any): string => {
+  console.log('item: ', item);
+  if (item.type === 'match') return 'Match';
+  if (item.type === 'patch') return 'Patch';
+  if (item.metadata?.event?.message === 'Initial creation') return 'Initial Creation';
+  if (item.metadata?.event?.monitor_state_changed === 'enable') return 'Enabled';
+  if (item.metadata?.event?.monitor_state_changed === 'disable') return 'Disabled';
+  return 'Unknown';
+};
+
+onMounted(async () => {  
   if (!authStore.isTokenValid()) {
-    console.warn('Token invalid, redirecting to login...')
     authStore.showLoginModal = true;
   } else {
   }
   appStore.clearBanner();
 
-  refresh();
+  refresh(false);
 });
 
 // Fetches all the recent events 
-const refresh = () => {
+const refresh = (reloadTable: boolean) => {
   if(appStore.monitors.length){
+    if(reloadTable){
       isTableLoading.value = true;
+    }
+      
       appStore.fetchAllEvents();      
   }
   else {
@@ -233,6 +277,13 @@ const openPopup = (event: any) => {
   }
 };
 
+const openImagePopup = (item: any) => {
+  const src = appStore.eventImagesMap.get(item.metadata.event.event_id) || imagePlaceholder;
+  featureImageId.value = appStore.eventSourcesMap.get(item.metadata.event.event_id).features[0]["id"]
+  currentImage.value = src;
+  popupImageOpen.value = true;
+}
+
 const unhighlightSelectedEvent = () => {
   appStore.selectedEvent = null;
 };
@@ -243,8 +294,28 @@ watch(() => appStore.monitorEvents, () => {
 
 // When new monitors are fetched the event feed automatically refreshes
 watch(() => appStore.monitors, () => {
-  refresh();
+  refresh(true);
 });
+
+watch(
+  () => appStore.monitorRefresh,        
+  async (newVal: boolean, oldVal: boolean) => {
+    if (newVal === true && oldVal == false) {
+
+      if(appStore.demoMode){
+      await appStore.fetchDemoMonitors();      // read demoData.JSON
+      }
+      else {
+        await appStore.fetchMonitors();
+      }
+
+      appStore.monitorManagerRefresh(false);
+
+    }
+  }
+);
+
+
 </script>
 
 <style scoped>
@@ -296,5 +367,14 @@ watch(() => appStore.monitors, () => {
   align-items: center;
   column-gap: 20px;
   padding: 10px 0px;
+}
+
+.thumbnail {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+.thumbnail:hover {
+  transform: scale(1.50);
+  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.2);
 }
 </style>

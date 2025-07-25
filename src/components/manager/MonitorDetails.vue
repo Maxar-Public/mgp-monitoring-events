@@ -46,6 +46,12 @@
                     {{ operatorSymbols[key] }} {{ val }}
                   </span>
                 </p>
+                <p v-if="monitor.match_criteria?.['aoi:coverage_pct']">
+                  <strong>AOI Coverage Pertentage: </strong>
+                  <span v-for="(val,key) in monitor.match_criteria['aoi:coverage_pct']" :key="key">
+                    {{ operatorSymbols[key] }} {{ val }}
+                  </span>
+                </p>
                 <p v-if="monitor.match_criteria.platform">
                   <strong>Platforms:</strong> {{ monitor.match_criteria.platform.in.join(", ") }}
                 </p>

@@ -15,6 +15,9 @@ interface CreateMonitorInterface {
     "view:off_nadir"?: {
       [operator: string]: number;
     };
+    "aoi:coverage_pct"?: {
+      [operator: string]: number;
+    };
   };
   metadata: {
     store_name: string,

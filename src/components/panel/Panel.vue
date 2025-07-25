@@ -1,20 +1,20 @@
 <template>
   <div>
     <v-card class="sidebar">
-      <v-card-title class="text-black title-bar">Monitoring</v-card-title>
+      <v-card-title class="text-black title-bar">Monitoring Demo</v-card-title>
       <v-card-text class="text-black sidebar-content">
-        
+
         <!-- Buttons -->
         <v-card-actions class="action-buttons-top">
         </v-card-actions>
 
         <!-- Vertical Tabs Navigation -->
         <v-tabs v-model="tab" direction="vertical" class="nav-tabs">
-          <v-tab prepend-icon="mdi-map" to="/">Map</v-tab>
+          <v-tab prepend-icon="mdi-table" to="/">Event Feed</v-tab>
           <v-tab prepend-icon="mdi-account-cog" to="/manager">Monitor Manager</v-tab>
-          <v-tab prepend-icon="mdi-table" to="/events">Event Feed</v-tab>
+          <v-tab prepend-icon="mdi-plus" to="/map"  @click="showAddMonitorBanner">Add New Monitor</v-tab>
         </v-tabs>
-      </v-card-text>   
+      </v-card-text>
       <v-switch
         class="nav-tabs font-weight-bold demo-mode-switch"
         v-model="demoSwitch"
@@ -22,7 +22,7 @@
         label="Demo Mode"
         inset
         @click.stop="toggleDemoMode(!demoSwitch)"
-      /> 
+      />
     </v-card>
   </div>
 </template>
@@ -30,23 +30,47 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { useAppStore } from '@/stores/app';
+import { useRoute } from 'vue-router';
 
 const mapStore = useAppStore();
 const tab = ref(0);
 const demoSwitch = ref(mapStore.demoMode);
+const route = useRoute();
 
  const toggleDemoMode = (demoModeStatus: boolean) => {
   mapStore.toggleDemoMode(demoModeStatus);
   mapStore.monitorManagerRefresh(true);
   if(demoModeStatus){
-    mapStore.setBanner("success", "Demo Mode ON: Showing simulated monitors.");
+    mapStore.setBanner("success", "Demo Mode ON: Showing simulated monitors and events.");
+    setTimeout(() => {
+      if (route.path === '/map') {
+        mapStore.setBanner('warning', "Monitor creation is disabled in demo mode.");
+      }
+    }, 5000);
   }
   else {
-    mapStore.setBanner("warning", "Demo Mode OFF: Fetching Monitors from API.");
+    mapStore.setBanner("warning", "Demo Mode OFF: Fetching real data from API.");
+    setTimeout(() => {
+      if (route.path === '/map') {
+        mapStore.setBanner('info', "Select a location, then click 'Create New Monitor' to draw the boundary.");
+      }
+    }, 5000);
   }
-  
+}
 
-} 
+const showAddMonitorBanner = () => {
+  if (mapStore.demoMode) {
+    mapStore.setBanner(
+      'warning',
+      "Monitor creation is disabled in demo mode."
+    );
+  } else {
+    mapStore.setBanner(
+      'info',
+      "Select a location, then click 'Create New Monitor' to draw the boundary."
+    );
+  }
+}
 
 </script>
 

@@ -6,7 +6,8 @@ export const useAppStore = defineStore("app", {
     demoMode: false,
     drawingMode: false,
     bbox: [],
-    platformList: ["geoeye-01", "worldview-01", "worldview-02", "worldview-03", "worldview-legion-01", "worldview-legion-02"] ,
+    platformList: ["geoeye-01", "worldview-01", "worldview-02", "worldview-03", "worldview-legion-01", "worldview-legion-02", "worldview-legion-03", "worldview-legion-04"],
+      //"worldview-legion-05", "worldview-legion-06"
     createMonitorModal: false,
     updateMonitorModal: false,
     monitorRefresh: false,
@@ -89,7 +90,7 @@ export const useAppStore = defineStore("app", {
         }
 
         const data = await response.json();
-    
+
         // Filters only monitors that contain the correct metadata
         this.monitors = data.data.monitors.filter((monitor: Monitor) => monitor.metadata.store_name);
 
@@ -101,17 +102,16 @@ export const useAppStore = defineStore("app", {
     },
 
     async fetchDemoMonitors(){
-      //import demoData = "@\monitoring\demoData.json";
       try{
         const demoData = await import("@/demoData.json")
         const data = demoData;
-    
+
         // Filters only monitors that contain the correct metadata
         this.monitors = data.data.monitors.filter(monitor => monitor.metadata.store_name);
 
         // Place monitors in map for their respective events
         this.monitors.forEach(monitor => this.monitorMap.set(monitor.id, monitor));
-        
+
       } catch(error) {
         console.error("Error fetching monitors:", error);
       }
@@ -119,6 +119,10 @@ export const useAppStore = defineStore("app", {
     },
 
     async fetchMonitorEvents(monitorId: string){
+      if (this.demoMode && monitorId.startsWith('demo:')) {
+        return this.fetchDemoMonitorEvents(monitorId);
+      }
+
       try{
         const response = await fetch(`https://api.maxar.com/monitoring/v1/monitors/${monitorId}/events?maxar_api_key=${sessionStorage.getItem('apiKey')}`,
           {
@@ -148,6 +152,34 @@ export const useAppStore = defineStore("app", {
         return [];
       }
     },
+
+    async fetchDemoMonitorEvents(monitorId: string){
+      try{
+        const demoData = await import("@/demoData.json");
+        const demoEvents = (demoData.events as any)[monitorId] || [];
+
+        const monitor = this.monitorMap.get(monitorId);
+        const storeName = monitor?.metadata.store_name || "";
+        const marketSegment = monitor?.metadata.market_segment || "";
+        const address = monitor?.metadata.address || "";
+
+        const events = demoEvents.map((event: any) => ({
+          id: event.id,
+          event_timestamp: event.event_timestamp,
+          type: event.event.type ? event.event.type : "",
+          store_name: storeName,
+          market_segment: marketSegment,
+          address: address,
+          metadata: event,
+        }));
+
+        return events;
+      }
+      catch (error) {
+        console.error("Error fetching demo events:", error);
+        return [];
+      }
+    },
     async fetchAllEvents(){
       try {
         // Fetching all events from each monitor of the user
@@ -167,7 +199,12 @@ export const useAppStore = defineStore("app", {
       this.monitorEvents.forEach(event => {
         if(!this.eventImagesMap.get(event.metadata.event.event_id)){
           if(event.metadata.event.event_id){
-            this.fetchEventInfo(event.metadata.event.event_id)
+            // Check if this is a demo event
+            if (this.demoMode && event.metadata.event.event_id.startsWith('demo-image:')) {
+              this.fetchDemoEventInfo(event.metadata.event.event_id, event.id);
+            } else {
+              this.fetchEventInfo(event.metadata.event.event_id);
+            }
           }
           else{
             // In the case that event does not contain image information, safe event metadata in map using id.
@@ -181,7 +218,7 @@ export const useAppStore = defineStore("app", {
     },
     async fetchEventInfo(eventId: string){
       try {
-        // fetching Event Source Info, this should be changed in the future to the correct endpoint 
+        // fetching Event Source Info, this should be changed in the future to the correct endpoint
         const sourceResponse = await fetch(`https://api.maxar.com/discovery/v1/search?sortby=datetime&ids=${eventId}&maxar_api_key=${sessionStorage.getItem('apiKey')}`,
           {
             method: "GET"
@@ -203,13 +240,92 @@ export const useAppStore = defineStore("app", {
         console.error("Error fetching data:", error);
       }
     },
-  
+
+
+    async fetchDemoEventInfo(demoEventId: string, eventId: string){
+      try {
+        // Create mock event source data for demo events
+        const mockEventSource = {
+          features: [{
+            id: demoEventId,
+            properties: {
+              datetime: new Date().toISOString(),
+              platform: "worldview-03",
+              cloud_cover: Math.floor(Math.random() * 20),
+            },
+            bbox: [
+              -105.1 + Math.random() * 0.2,
+              39.7 + Math.random() * 0.2,
+              -104.9 + Math.random() * 0.2,
+              39.9 + Math.random() * 0.2
+            ]
+          }]
+        };
+
+        this.eventSourcesMap.set(demoEventId, mockEventSource);
+        this.eventSourcesMap = new Map(this.eventSourcesMap);
+
+
+        try {
+          // Use the demo satellite SVG image
+          const demoImageUrl = new URL('@/assets/demo-satellite.svg', import.meta.url).href;
+          this.eventImagesMap.set(demoEventId, demoImageUrl);
+          this.eventImagesMap = new Map(this.eventImagesMap);
+        } catch (svgError) {
+          // Fallback to canvas generation if SVG fails
+          const canvas = document.createElement('canvas');
+          canvas.width = 512;
+          canvas.height = 512;
+          const ctx = canvas.getContext('2d');
+
+          if (ctx) {
+            const gradient = ctx.createLinearGradient(0, 0, 512, 512);
+            const colors = ['#4a5d23', '#6b7c32', '#8b9a41', '#a8b850'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+
+            gradient.addColorStop(0, randomColor);
+            gradient.addColorStop(1, '#2d3a1a');
+
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 512, 512);
+
+            ctx.fillStyle = 'rgba(139, 154, 65, 0.6)';
+            for (let i = 0; i < 5; i++) {
+              const x = Math.random() * 400;
+              const y = Math.random() * 400;
+              const size = 20 + Math.random() * 80;
+              ctx.fillRect(x, y, size, size);
+            }
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.font = '16px Arial';
+            ctx.fillText('DEMO IMAGE', 10, 30);
+          }
+
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const imageUrl = URL.createObjectURL(blob);
+              this.eventImagesMap.set(demoEventId, imageUrl);
+              this.eventImagesMap = new Map(this.eventImagesMap); 
+            }
+          });
+        }
+
+      } catch (error) {
+        console.error("Error creating demo event info:", error);
+        this.eventSourcesMap.set(eventId, {});
+        this.eventImagesMap.set(eventId, 'noImage');
+        this.eventSourcesMap = new Map(this.eventSourcesMap);
+        this.eventImagesMap = new Map(this.eventImagesMap);
+      }
+    },
+
     async toggleMonitorStatus(monitorId: string, action: "enable" | "disable") {
       const url = `https://api.maxar.com/monitoring/v1/monitors/${monitorId}/${action}?maxar_api_key=${sessionStorage.getItem('apiKey')}`;
       const response = await fetch(url, {
         method: "POST"
       });
-    
+
       return response;
     }
   },
