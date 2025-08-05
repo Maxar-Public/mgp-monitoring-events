@@ -1,81 +1,156 @@
-# Vuetify (Default)
+# Monitoring
 
-This is the official scaffolding tool for Vuetify, designed to give you a head start in building your new Vuetify application. It sets up a base template with all the necessary configurations and standard directory structure, enabling you to begin development without the hassle of setting up the project from scratch.
+The Monitoring Application enables users to set up and manage monitors with specific Areas of Interest (AOI) to track newly acquired imagery and events. This tool uses the Monitoring API. The application allows users to define custom criteria for monitoring, receive notifications when matching events occur, and manage their existing monitors through an interactive interface.
 
-## ❗️ Important Links
+The use case guiding the application design was real estate site monitoring. The application can store the address, business name, and retail segment of the building being monitored. The analyst using this app would probably not be a platform user with their own account, so we demonstrate storing an external user ID in the monitor metadata. While we could have displayed the imagery on an interactive map using the WMS endpoints, this concept was already demonstrated in the Streaming Search sample application. To present an alternative API, the application uses the Get Browse Image endpoint which returns low resolution preview images instead.
 
-- 📄 [Docs](https://vuetifyjs.com/)
-- 🚨 [Issues](https://issues.vuetifyjs.com/)
-- 🏬 [Store](https://store.vuetifyjs.com/)
-- 🎮 [Playground](https://play.vuetifyjs.com/)
-- 💬 [Discord](https://community.vuetifyjs.com)
+## Jupyter Notebook
 
-## 💿 Install
+A companion Jupyter Notebook demonstrates working with the Monitoring APIs in Python. It's not intended to duplicate the real estate use case, but provides a good starting point to learn how to interact with the different endpoints in the Monitoring API.
 
-Set up your project using your preferred package manager. Use the corresponding command to install the dependencies:
 
-| Package Manager                                                | Command        |
-|---------------------------------------------------------------|----------------|
-| [yarn](https://yarnpkg.com/getting-started)                   | `yarn install` |
-| [npm](https://docs.npmjs.com/cli/v7/commands/npm-install)     | `npm install`  |
-| [pnpm](https://pnpm.io/installation)                          | `pnpm install` |
-| [bun](https://bun.sh/#getting-started)                        | `bun install`  |
+## Features
 
-After completing the installation, your environment is ready for Vuetify development.
+- **Framework:** Built using Vue 3 and Vuetify 3 for a responsive and modern UI.
+- **State Management:** Utilizes custom state management.
+- **Routing:** Includes Vue Router for single-page application navigation.
+- **Build Tool:** Powered by Vite for fast development and build processes.
 
-## ✨ Features
+## Installation
 
-- 🖼️ **Optimized Front-End Stack**: Leverage the latest Vue 3 and Vuetify 3 for a modern, reactive UI development experience. [Vue 3](https://v3.vuejs.org/) | [Vuetify 3](https://vuetifyjs.com/en/)
-- 🗃️ **State Management**: Integrated with [Pinia](https://pinia.vuejs.org/), the intuitive, modular state management solution for Vue.
-- 🚦 **Routing and Layouts**: Utilizes Vue Router for SPA navigation and vite-plugin-vue-layouts for organizing Vue file layouts. [Vue Router](https://router.vuejs.org/) | [vite-plugin-vue-layouts](https://github.com/JohnCampionJr/vite-plugin-vue-layouts)
-- 💻 **Enhanced Development Experience**: Benefit from TypeScript's static type checking and the ESLint plugin suite for Vue, ensuring code quality and consistency. [TypeScript](https://www.typescriptlang.org/) | [ESLint Plugin Vue](https://eslint.vuejs.org/)
-- ⚡ **Next-Gen Tooling**: Powered by Vite, experience fast cold starts and instant HMR (Hot Module Replacement). [Vite](https://vitejs.dev/)
-- 🧩 **Automated Component Importing**: Streamline your workflow with unplugin-vue-components, automatically importing components as you use them. [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components)
-- 🛠️ **Strongly-Typed Vue**: Use vue-tsc for type-checking your Vue components, and enjoy a robust development experience. [vue-tsc](https://github.com/johnsoncodehk/volar/tree/master/packages/vue-tsc)
+Node.js and npm Installation Guide
 
-These features are curated to provide a seamless development experience from setup to deployment, ensuring that your Vuetify application is both powerful and maintainable.
+### Windows and macOS Installation
 
-## 💡 Usage
+1. **Download Node.js**  
+   - Go to the [Node.js download page](https://nodejs.org/) and download the latest **LTS** (Long-Term Support) version, which includes npm.
 
-This section covers how to start the development server and build your project for production.
+2. **Install Node.js**  
+   - Open the downloaded installer and follow the installation prompts.  
+   - This will install both Node.js and npm.
 
-### Starting the Development Server
+3. **For Additional Guidance**  
+   - Visit the official [Node.js Documentation](https://nodejs.org/en/docs/) for more information on setup and usage.
 
-To start the development server with hot-reload, run the following command. The server will be accessible at [http://localhost:3000](http://localhost:3000):
+### Linux Installation
 
-```bash
-yarn dev
+For Linux, you can install Node.js and npm via a package manager (like `apt` for Debian/Ubuntu, or `dnf` for RHEL/Fedora), or directly using `nvm` (Node Version Manager) for easier version control.
+
+#### Using a Package Manager
+
+- **Debian/Ubuntu**:
+    ```
+    sudo apt update
+    sudo apt install -y nodejs npm
+    ```
+
+    ```
+    # Run this to check if NodeJS and NPM are installed and verify the version
+
+    node -v   # This should display the Node.js version
+    npm -v    # This should display the npm version
+    ```
+
+## Setup Instructions
+
+1. **Clone the Repository**
+
+    Clone the project to your local machine:
+    ```
+    git clone https://github.com/Maxar-Public/mgp-monitoring-events.git
+    ```
+
+2. **Install Dependencies**
+
+    Install the necessary dependencies using npm:
+    ```
+    npm install
+    ```
+    (You can also use `yarn install` or `pnpm install`.)
+
+## Usage
+
+### Development Server
+
+To start the development server:
+```
+npm run dev
 ```
 
-(Repeat for npm, pnpm, and bun with respective commands.)
+This will launch the application at `http://localhost:3000`.
 
-> Add NODE_OPTIONS='--no-warnings' to suppress the JSON import warnings that happen as part of the Vuetify import mapping. If you are on Node [v21.3.0](https://nodejs.org/en/blog/release/v21.3.0) or higher, you can change this to NODE_OPTIONS='--disable-warning=5401'. If you don't mind the warning, you can remove this from your package.json dev script.
+**Note:** To run this command and any other command you need to locate yourself where the project is; otherwise, it will throw an error.
 
-### Building for Production
+### Build for Production
 
-To build your project for production, use:
-
-```bash
-yarn build
+To create an optimized production build:
+```
+npm run build
 ```
 
-(Repeat for npm, pnpm, and bun with respective commands.)
+### Run Tests
 
-Once the build process is completed, your application will be ready for deployment in a production environment.
+Run the project unit tests using Vitest:
+```
+npm run test
+```
 
-## 💪 Support Vuetify Development
+## About the Monitoring Application
 
-This project is built with [Vuetify](https://vuetifyjs.com/en/), a UI Library with a comprehensive collection of Vue components. Vuetify is an MIT licensed Open Source project that has been made possible due to the generous contributions by our [sponsors and backers](https://vuetifyjs.com/introduction/sponsors-and-backers/). If you are interested in supporting this project, please consider:
+### Overview
 
-- [Requesting Enterprise Support](https://support.vuetifyjs.com/)
-- [Sponsoring John on Github](https://github.com/users/johnleider/sponsorship)
-- [Sponsoring Kael on Github](https://github.com/users/kaelwd/sponsorship)
-- [Supporting the team on Open Collective](https://opencollective.com/vuetify)
-- [Becoming a sponsor on Patreon](https://www.patreon.com/vuetify)
-- [Becoming a subscriber on Tidelift](https://tidelift.com/subscription/npm/vuetify)
-- [Making a one-time donation with Paypal](https://paypal.me/vuetify)
+The **Monitoring Application** is a Vue.js-based tool that enables users to set up and manage monitors for tracking newly acquired imagery and events in specific Areas of Interest (AOI). This documentation outlines the application's capabilities, API endpoints, and key features.
 
-## 📑 License
-[MIT](http://opensource.org/licenses/MIT)
+### Key Features
 
-Copyright (c) 2016-present Vuetify, LLC
+#### 1. Monitor Management
+
+- Create monitors with custom parameters  
+- Define Areas of Interest (AOI) using GeoJSON
+- Set match criteria for cloud cover, off-nadir angle, and platforms
+- Enable/disable existing monitors  
+- View and edit monitor details  
+
+#### 2. Map Visualization
+
+- Interactive map interface for defining and viewing AOIs  
+- Visualization of monitor coverage areas
+- Spatial data representation 
+
+#### 3. Event Tracking
+
+- Event feed displaying all events from active monitors
+- Filtering and sorting capabilities for events
+- Detailed metadata for each event
+
+#### 4. User Authentication
+
+- Simulates an external identity system   
+- User-specific monitor management
+
+#### 5. Demo Mode
+
+- Sample data shows simulated monitors and images to demonstrate functionality before real monitors are set up and matching images
+
+## API Endpoints
+
+Based on the available code, the application likely interacts with the following endpoints:
+
+### Monitor Management
+
+- `GET /monitors` – Retrieve all monitors for the authenticated user  
+- `POST /monitors` – Create a new monitor  
+- `GET /monitors/{id}` – Get details for a specific monitor  
+- `PUT /monitors/{id}` – Update an existing monitor  
+- `DELETE /monitors/{id}` – Delete a monitor  
+
+### Event Tracking
+
+- `GET /events` – Retrieve all events  
+- `GET /monitors/{id}/events` – Get events for a specific monitor  
+- `GET /events/{id}` – Get detailed information about a specific event  
+
+### Browse Imagery
+
+- `GET /browse-archive/v1/browse/show` - Get a browse image (a lower-resolution preview)
+
