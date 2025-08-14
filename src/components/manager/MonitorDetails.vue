@@ -26,7 +26,7 @@
               <v-expansion-panel-text v-if="monitor.aoi_geojson?.coordinates">
                 <ul v-if="monitor.aoi_geojson?.coordinates" class="ml-4">
                   <li v-for="(coord, index) in monitor.aoi_geojson.coordinates[0]" :key="index">
-                    {{ coord[1] }}, {{ coord[0] }}
+                    {{ coord[0] }}, {{ coord[1] }}
                   </li>
                 </ul>
               </v-expansion-panel-text>
